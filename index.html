@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Hub - AI vs Human / PvP Games</title>
+  <style>
+    /* Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    body.dark-mode {
+      background-color: #2e2e2e;
+      color: #f5f5f5;
+    }
+    /* Top Bar Styles */
+    .top-bar {
+      width: 100%;
+      background-color: #4a90e2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      position: relative;
+    }
+    .top-bar h1 {
+      font-size: 1.5rem;
+      color: #fff;
+    }
+    /* Dark Mode Toggle Button */
+    .dark-mode-toggle {
+      background-color: transparent;
+      border: 2px solid #fff;
+      border-radius: 5px;
+      padding: 5px 10px;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .dark-mode-toggle:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    /* Hamburger Menu (3-bar icon) Styles */
+    .menu-icon {
+      cursor: pointer;
+      display: inline-block;
+    }
+    .menu-icon div {
+      width: 25px;
+      height: 3px;
+      background-color: #fff;
+      margin: 4px 0;
+      transition: 0.4s;
+    }
+    /* Game Menu Dropdown Styles */
+    .game-menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      left: 20px;
+      background-color: #4a90e2;
+      padding: 10px 15px;
+      border-radius: 5px;
+      min-width: 200px;
+      z-index: 10;
+    }
+    .game-menu a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 0;
+      transition: text-decoration 0.3s;
+    }
+    .game-menu a:hover {
+      text-decoration: underline;
+    }
+    .coming-soon {
+      font-style: italic;
+      color: #fff;
+      padding-top: 8px;
+      margin-top: 10px;
+      border-top: 1px solid #fff;
+    }
+    /* Main Content */
+    .content {
+      padding: 20px;
+    }
+    /* Game Section Styles */
+    .game-section {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #e9e9e9;
+      border-radius: 5px;
+    }
+    .game-section h2 {
+      margin-bottom: 10px;
+    }
+    .move-buttons {
+      margin: 10px 0;
+    }
+    .move-button {
+      padding: 10px 15px;
+      margin-right: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4a90e2;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .move-button:hover {
+      background-color: #357ab8;
+    }
+    #game-result p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <!-- Hamburger Menu Icon -->
+    <div class="menu-icon" id="menuToggle">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <h1>Game Hub</h1>
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle">Dark Mode</button>
+  </div>
+  
+  <!-- Game Menu Dropdown -->
+  <div class="game-menu" id="gameMenu">
+    <a href="#ai-vs-human" onclick="showSection('ai-vs-human')">AI vs Human</a>
+    <a href="#player-vs-player" onclick="showSection('player-vs-player')">Player vs Player</a>
+    <div class="coming-soon">Coming Soon</div>
+  </div>
+  
+  <!-- Main Content Section -->
+  <div class="content">
+    <!-- AI vs Human Game Section -->
+    <section id="ai-vs-human" class="game-section">
+      <h2>AI vs Human: Rock, Paper, Scissors</h2>
+      <p>Choose your move:</p>
+      <div class="move-buttons">
+        <button class="move-button" data-move="rock">Rock</button>
+        <button class="move-button" data-move="paper">Paper</button>
+        <button class="move-button" data-move="scissors">Scissors</button>
+      </div>
+      <div id="game-result"></div>
+    </section>
+    
+    <!-- Player vs Player Section (Coming Soon) -->
+    <section id="player-vs-player" class="game-section" style="display:none;">
+      <h2>Player vs Player</h2>
+      <p>This mode is coming soon!</p>
+    </section>
+  </div>
+  
+  <!-- JavaScript for Interactivity -->
+  <script>
+    // Dark mode toggle logic
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+    darkModeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      darkModeToggle.textContent = body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+    });
+
+    // Hamburger menu toggle logic
+    const menuToggle = document.getElementById('menuToggle');
+    const gameMenu = document.getElementById('gameMenu');
+    menuToggle.addEventListener('click', () => {
+      // Toggle display property
+      gameMenu.style.display = gameMenu.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Optional: Close the game menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!document.querySelector('.top-bar').contains(e.target) && gameMenu.style.display === 'block') {
+        gameMenu.style.display = 'none';
+      }
+    });
+
+    // Navigation: Show selected game section
+    function showSection(id) {
+      // Hide all game sections
+      document.querySelectorAll('.game-section').forEach(section => section.style.display = 'none');
+      // Show the selected section
+      document.getElementById(id).style.display = 'block';
+      // Hide the game menu after selection
+      gameMenu.style.display = 'none';
+    }
+
+    // AI vs Human Game Logic for Rock, Paper, Scissors
+    const moves = ['rock', 'paper', 'scissors'];
+    const buttons = document.querySelectorAll('.move-button');
+    const gameResult = document.getElementById('game-result');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', function() {
+        const userMove = this.dataset.move;
+        const aiMove = moves[Math.floor(Math.random() * moves.length)];
+        let result = '';
+
+        // Determine game result
+        if (userMove === aiMove) {
+          result = "It's a tie!";
+        } else if (
+          (userMove === 'rock' && aiMove === 'scissors') ||
+          (userMove === 'paper' && aiMove === 'rock') ||
+          (userMove === 'scissors' && aiMove === 'paper')
+        ) {
+          result = "You win!";
+        } else {
+          result = "AI wins!";
+        }
+
+        // Display the round result
+        gameResult.innerHTML = `
+          <p>You chose <strong>${userMove}</strong>.</p>
+          <p>AI chose <strong>${aiMove}</strong>.</p>
+          <p><strong>${result}</strong></p>
+        `;
+      });
+    });
+  </script>
+</body>
+</html>
