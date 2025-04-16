@@ -1,217 +1,429 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Game Hub - Ultimate Gaming Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
-    /* ===== Global Styles & Theme Colors ===== */
-    :root {
-      /* Light mode colors */
-      --light-bg: #e0f7fa;         /* Light blue background */
-      --light-text: #2d3436;       /* Dark text */
-      --light-accent: #03a9f4;     /* Light blue accent (buttons, menus, etc.) */
-      
-      /* Dark mode colors */
-      --dark-bg: #121212;          /* Near-black background */
-      --dark-text: #f1f1f1;        /* Light text */
-      --dark-accent: #000000;      /* Black accent for dark mode */
-      
-      /* Misc */
-      --transition: all 0.3s ease;
-      --shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-
+    /* ===== RESET & BASE ===== */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
+    
+    /* ===== THEME VARIABLES ===== */
+    :root {
+      /* Light Mode */
+      --bg-light: #e0f7fa;         /* Soft light-blue background */
+      --text-light: #2d3436;       /* Dark text */
+      --accent-light: #03a9f4;     /* Light blue accent */
+      
+      /* Dark Mode */
+      --bg-dark: #121212;          /* Near-black background */
+      --text-dark: #ffffff;        /* White text */
+      --accent-dark: #000000;      /* Black accent for dark mode */
+      
+      --transition: all 0.3s ease;
+    }
+    
     body {
       font-family: 'Roboto', sans-serif;
-      background-color: var(--light-bg);
-      color: var(--light-text);
+      background-color: var(--bg-light);
+      color: var(--text-light);
       transition: var(--transition);
-      padding-top: 60px; /* Account for fixed top bar */
+      padding-top: 60px; /* space for top bar */
     }
-
+    
     body.dark-mode {
-      background-color: var(--dark-bg);
-      color: var(--dark-text);
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
     }
-
-    /* ===== Top Bar & Hamburger Menu ===== */
+    
+    /* ===== TOP BAR & HAMBURGER MENU ===== */
     .top-bar {
       position: fixed;
       top: 0;
       left: 0;
-      right: 0;
+      width: 100%;
+      height: 60px;
+      background-color: var(--accent-light);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: var(--light-accent);
-      padding: 0.5rem 1.5rem;
-      box-shadow: var(--shadow);
+      padding: 0 20px;
       z-index: 1000;
       transition: var(--transition);
     }
     
     body.dark-mode .top-bar {
-      background: var(--dark-accent);
+      background-color: var(--accent-dark);
     }
-
+    
     .top-bar h1 {
       font-family: 'Press Start 2P', cursive;
       font-size: 1.2rem;
       color: #fff;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-      margin-left: 50px; /* So it doesn't overlap with hamburger */
+      margin-left: 50px;
     }
-
-    /* Redesigned hamburger icon – fixed top left */
+    
+    /* Redesigned hamburger: fixed, modern, and transforms into an “X” */
     .hamburger {
       position: fixed;
-      top: 12px;
-      left: 12px;
-      z-index: 1001;
-      width: 35px;
-      height: 30px;
-      cursor: pointer;
+      top: 15px;
+      left: 15px;
+      z-index: 1100;
+      width: 30px;
+      height: 25px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      cursor: pointer;
     }
-
+    
     .hamburger div {
       width: 100%;
       height: 4px;
       background-color: #fff;
       border-radius: 2px;
-      transition: 0.4s;
+      transition: var(--transition);
     }
-
+    
     .hamburger.active div:nth-child(1) {
-      transform: translateY(13px) rotate(45deg);
+      transform: translateY(10px) rotate(45deg);
     }
-
+    
     .hamburger.active div:nth-child(2) {
       opacity: 0;
     }
-
+    
     .hamburger.active div:nth-child(3) {
-      transform: translateY(-13px) rotate(-45deg);
+      transform: translateY(-10px) rotate(-45deg);
     }
-
-    /* Dropdown Menu styling */
+    
+    /* Menu Dropdown */
     .menu {
       position: fixed;
       top: 60px;
       left: 0;
       width: 100%;
-      background: var(--light-bg);
-      box-shadow: var(--shadow);
-      padding: 1rem;
+      background-color: var(--bg-light);
       display: none;
       flex-direction: column;
-      z-index: 1000;
+      align-items: center;
+      padding: 10px 0;
+      z-index: 1050;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-
+    
     body.dark-mode .menu {
-      background: var(--dark-bg);
+      background-color: var(--bg-dark);
     }
-
+    
     .menu a {
       text-decoration: none;
       color: inherit;
-      padding: 0.7rem;
-      background: var(--light-accent);
-      margin: 0.5rem 0;
-      border-radius: 8px;
+      margin: 10px 0;
+      padding: 10px 20px;
+      width: 80%;
       text-align: center;
-      transition: var(--transition);
+      background-color: var(--accent-light);
+      border-radius: 5px;
       font-family: 'Press Start 2P', cursive;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
+      transition: var(--transition);
     }
-
+    
     body.dark-mode .menu a {
-      background: var(--dark-accent);
+      background-color: var(--accent-dark);
     }
-
+    
     .menu a:hover {
       transform: scale(1.05);
     }
-
+    
     .menu.show {
       display: flex;
     }
-
-    /* ===== Dark Mode Toggle Button ===== */
+    
+    /* Dark Mode Toggle Button */
     .dark-toggle {
       position: fixed;
-      top: 12px;
-      right: 12px;
-      background: rgba(255, 255, 255, 0.3);
+      top: 15px;
+      right: 15px;
+      background: rgba(255,255,255,0.3);
       border: none;
       border-radius: 5px;
       padding: 5px 10px;
       cursor: pointer;
-      z-index: 1001;
-      font-size: 1.2rem;
+      z-index: 1100;
+      font-size: 1rem;
       transition: var(--transition);
     }
-
-    /* ===== Main Content ===== */
+    
+    /* ===== MAIN CONTENT ===== */
     .content {
-      padding: 1rem 2rem;
-      margin-top: 80px; /* to ensure spacing below top-bar */
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
     }
     
     .game-section {
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 20px;
-      padding: 2rem;
-      margin: 2rem 0;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      background: rgba(255,255,255,0.9);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: var(--transition);
     }
-
+    
     body.dark-mode .game-section {
-      background: rgba(20, 20, 20, 0.9);
+      background: rgba(0, 0, 0, 0.8);
     }
-
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+    
+    .game-section h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1.2rem;
     }
-
-    /* ===== Buttons & Game Styles ===== */
-    .game-card {
+    
+    /* ===== ROCK PAPER SCISSORS ===== */
+    .rps-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    
+    .rps-card {
+      width: 80px;
+      height: 80px;
       background: #fff;
-      border-radius: 15px;
-      padding: 1rem;
-      text-align: center;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
       cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s;
-      box-shadow: var(--shadow);
-      font-size: 2rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-
-    .game-card:hover {
+    
+    .rps-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
-
-    /* ===== Rock Paper Scissors Animation ===== */
+    
     .rps-result {
-      margin-top: 1rem;
-      font-size: 2rem;
       text-align: center;
+      margin-top: 20px;
+      font-size: 1.8rem;
     }
-
-    /* Realistic shoot animation for emoji: they translate, scale, and fade in/out */
-    @keyframes emojiShoot {\n  0% { transform: scale(1) translateX(-50px); opacity: 0; }\n  50% { transform: scale(1.4) translateX(0px); opacity: 1; }\n  100% { transform: scale(1) translateX(50px); opacity: 0; }\n}\n\n.emoji-animation {\n  display: inline-block;\n  animation: emojiShoot 0.8s ease-out;\n}
-
-    /* ===== Tic Tac Toe Board ===== */
-    .ttt-grid {\n  display: grid;\n  grid-template-columns: repeat(3, 100px);\n  gap: 5px;\n  justify-content: center;\n  margin: 1rem 0;\n}\n\n.ttt-cell {\n  width: 100px;\n  height: 100px;\n  border: 1px solid #aaa;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 2rem;\n  cursor: pointer;\n  transition: background 0.3s;\n}\n\n.ttt-cell:hover {\n  background: #f1f1f1;\n}\n\n.ttt-result {\n  text-align: center;\n  margin-top: 1rem;\n  font-size: 1.5rem;\n}\n\n  </style>\n</head>\n<body>\n\n  <!-- Top Bar with Hamburger and Dark Toggle -->\n  <div class=\"top-bar\">\n    <div class=\"hamburger\" id=\"hamburger\" onclick=\"toggleMenu()\">\n      <div></div>\n      <div></div>\n      <div></div>\n    </div>\n    <h1>GAME HUB</h1>\n    <button class=\"dark-toggle\" onclick=\"toggleDarkMode()\">🌓</button>\n  </div>\n\n  <!-- Dropdown Menu -->\n  <nav class=\"menu\" id=\"menu\">\n    <a href=\"#rps\" onclick=\"switchSection('rps')\">Rock Paper Scissors</a>\n    <a href=\"#ttt\" onclick=\"switchSection('ttt')\">Tic Tac Toe</a>\n  </nav>\n\n  <!-- Main Content -->\n  <div class=\"content\">\n    <!-- Rock Paper Scissors Section -->\n    <section id=\"rps\" class=\"game-section\">\n      <h2>Rock Paper Scissors</h2>\n      <div style=\"display: flex; justify-content: center; gap: 1rem;\">\n        <div class=\"game-card\" data-move=\"rock\" onclick=\"playRPS('rock', this)\">✊</div>\n        <div class=\"game-card\" data-move=\"paper\" onclick=\"playRPS('paper', this)\">✋</div>\n        <div class=\"game-card\" data-move=\"scissors\" onclick=\"playRPS('scissors', this)\">✌️</div>\n      </div>\n      <div id=\"rps-result\" class=\"rps-result\"></div>\n    </section>\n\n    <!-- Tic Tac Toe Section -->\n    <section id=\"ttt\" class=\"game-section\" style=\"display: none;\">\n      <h2>Tic Tac Toe</h2>\n      <div class=\"ttt-grid\" id=\"ttt-board\"></div>\n      <div class=\"ttt-result\" id=\"ttt-result\"></div>\n      <button style=\"margin-top: 1rem; padding: 0.5rem 1rem; cursor: pointer;\" onclick=\"resetTTT()\">Reset Game</button>\n    </section>\n  </div>\n\n  <script>\n    /* ===== Menu & Theme Functions ===== */\n    const hamburger = document.getElementById('hamburger');\n    const menu = document.getElementById('menu');\n    function toggleMenu() {\n      hamburger.classList.toggle('active');\n      menu.classList.toggle('show');\n    }\n\n    function toggleDarkMode() {\n      document.body.classList.toggle('dark-mode');\n    }\n\n    // Switch visible section\n    function switchSection(sectionId) {\n      // Hide all sections\n      document.querySelectorAll('.game-section').forEach(section => {\n        section.style.display = 'none';\n      });\n      // Show target section\n      document.getElementById(sectionId).style.display = 'block';\n      // Close menu if open\n      hamburger.classList.remove('active');\n      menu.classList.remove('show');\n    }\n\n    /* ===== Rock Paper Scissors Game ===== */\n    const moves = {\n      rock: '✊',\n      paper: '✋',\n      scissors: '✌️'\n    };\n\n    function playRPS(playerMove, elem) {\n      const moveKeys = Object.keys(moves);\n      const botMove = moveKeys[Math.floor(Math.random() * moveKeys.length)];\n      let outcome = '';\n      \n      if (playerMove === botMove) {\n        outcome = 'Draw!';\n      } else if ((playerMove === 'rock' && botMove === 'scissors') ||\n                 (playerMove === 'paper' && botMove === 'rock') ||\n                 (playerMove === 'scissors' && botMove === 'paper')) {\n        outcome = 'You win!';\n      } else {\n        outcome = 'Bot wins!';\n      }\n\n      // Create a clone of the clicked element for animation\n      let animElem = elem.cloneNode(true);\n      animElem.style.position = 'absolute';\n      let rect = elem.getBoundingClientRect();\n      animElem.style.left = rect.left + 'px';\n      animElem.style.top = rect.top + 'px';\n      animElem.style.zIndex = 1000;\n      document.body.appendChild(animElem);\n      \n      // Apply our realistic shoot animation (move, scale, fade)\n      animElem.classList.add('emoji-animation');\n      \n      // Remove the element after animation finishes\n      setTimeout(() => {\n        document.body.removeChild(animElem);\n      }, 800);\n\n      document.getElementById('rps-result').innerHTML = `${moves[playerMove]} vs ${moves[botMove]}<br><strong>${outcome}</strong>`;\n    }\n\n    /* ===== Tic Tac Toe Game ===== */\n    let tttCurrentPlayer = 'X';\n    let tttBoardState = Array(9).fill('');\n    const tttBoardElem = document.getElementById('ttt-board');\n    const tttResultElem = document.getElementById('ttt-result');\n    const winPatterns = [\n      [0, 1, 2],\n      [3, 4, 5],\n      [6, 7, 8],\n      [0, 3, 6],\n      [1, 4, 7],\n      [2, 5, 8],\n      [0, 4, 8],\n      [2, 4, 6]\n    ];\n\n    function initTTT() {\n      tttBoardElem.innerHTML = '';\n      tttBoardState = Array(9).fill('');\n      tttResultElem.innerText = '';\n      for (let i = 0; i < 9; i++) {\n        const cell = document.createElement('div');\n        cell.classList.add('ttt-cell');\n        cell.dataset.index = i;\n        cell.addEventListener('click', () => makeTTTMove(cell, i));\n        tttBoardElem.appendChild(cell);\n      }\n    }\n\n    function makeTTTMove(cell, index) {\n      if (tttBoardState[index] !== '' || tttResultElem.innerText !== '') return;\n      cell.innerText = tttCurrentPlayer;\n      tttBoardState[index] = tttCurrentPlayer;\n      if (checkTTTWin()) {\n        tttResultElem.innerText = `${tttCurrentPlayer} wins!`;\n        // Brief pause before resetting board\n        setTimeout(initTTT, 1500);\n        return;\n      }\n      if (tttBoardState.every(cell => cell !== '')) {\n        tttResultElem.innerText = `It's a draw!`;\n        setTimeout(initTTT, 1500);\n        return;\n      }\n      tttCurrentPlayer = tttCurrentPlayer === 'X' ? 'O' : 'X';\n    }\n\n    function checkTTTWin() {\n      return winPatterns.some(pattern => {\n        const [a, b, c] = pattern;\n        return tttBoardState[a] && (tttBoardState[a] === tttBoardState[b]) && (tttBoardState[a] === tttBoardState[c]);\n      });\n    }\n\n    function resetTTT() {\n      initTTT();\n    }\n\n    // Initialize games on load\n    initTTT();\n  </script>\n</body>\n</html>
+    
+    /* Realistic “shoot” animation for emojis */
+    @keyframes emojiShoot {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      50% { transform: translateY(-30px) scale(1.4); opacity: 1; }
+      100% { transform: translateY(-60px) scale(1); opacity: 0; }
+    }
+    
+    .emoji-animation {
+      animation: emojiShoot 0.8s ease-out forwards;
+    }
+    
+    /* ===== TIC TAC TOE ===== */
+    .ttt-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 5px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    .ttt-cell {
+      width: 100px;
+      height: 100px;
+      background: #fafafa;
+      border: 2px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .ttt-cell:hover {
+      background: #e0f7fa;
+    }
+    
+    body.dark-mode .ttt-cell {
+      background: #333;
+      border: 2px solid #666;
+    }
+    
+    .ttt-result {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <h1>GAME HUB</h1>
+    <button class="dark-toggle" onclick="toggleDarkMode()">🌓</button>
+  </div>
+  
+  <!-- DROPDOWN MENU -->
+  <nav class="menu" id="menu">
+    <a href="#rps" onclick="switchSection('rps')">Rock Paper Scissors</a>
+    <a href="#ttt" onclick="switchSection('ttt')">Tic Tac Toe</a>
+  </nav>
+  
+  <!-- MAIN CONTENT -->
+  <div class="content">
+    <!-- ROCK PAPER SCISSORS SECTION -->
+    <section id="rps" class="game-section">
+      <h2>Rock Paper Scissors</h2>
+      <div class="rps-container">
+        <div class="rps-card" onclick="playRPS('rock', this)">✊</div>
+        <div class="rps-card" onclick="playRPS('paper', this)">✋</div>
+        <div class="rps-card" onclick="playRPS('scissors', this)">✌️</div>
+      </div>
+      <div id="rps-result" class="rps-result"></div>
+    </section>
+  
+    <!-- TIC TAC TOE SECTION -->
+    <section id="ttt" class="game-section" style="display: none;">
+      <h2>Tic Tac Toe</h2>
+      <div class="ttt-grid" id="ttt-board"></div>
+      <div class="ttt-result" id="ttt-result"></div>
+      <button style="display:block; margin: 10px auto; padding: 8px 15px; cursor: pointer;" onclick="resetTTT()">Reset Game</button>
+    </section>
+  </div>
+  
+  <script>
+    /* ==== MENU & THEME FUNCTIONS ==== */
+    const hamburger = document.getElementById('hamburger');
+    const menu = document.getElementById('menu');
+    function toggleMenu() {
+      hamburger.classList.toggle('active');
+      menu.classList.toggle('show');
+    }
+    
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+    
+    function switchSection(sectionId) {
+      document.querySelectorAll('.game-section').forEach(sec => sec.style.display = 'none');
+      document.getElementById(sectionId).style.display = 'block';
+      // Close menu if open
+      hamburger.classList.remove('active');
+      menu.classList.remove('show');
+    }
+    
+    /* ==== ROCK PAPER SCISSORS ==== */
+    const moves = {
+      rock: '✊',
+      paper: '✋',
+      scissors: '✌️'
+    };
+    
+    function playRPS(playerMove, elem) {
+      const moveKeys = Object.keys(moves);
+      const botMove = moveKeys[Math.floor(Math.random() * moveKeys.length)];
+      let outcome = '';
+      
+      if (playerMove === botMove) {
+        outcome = 'Draw!';
+      } else if ((playerMove === 'rock' && botMove === 'scissors') ||
+                 (playerMove === 'paper' && botMove === 'rock') ||
+                 (playerMove === 'scissors' && botMove === 'paper')) {
+        outcome = 'You win!';
+      } else {
+        outcome = 'Bot wins!';
+      }
+      
+      // Clone element for animation
+      let animElem = elem.cloneNode(true);
+      animElem.style.position = 'absolute';
+      let rect = elem.getBoundingClientRect();
+      animElem.style.left = rect.left + 'px';
+      animElem.style.top = rect.top + 'px';
+      animElem.style.zIndex = 1000;
+      document.body.appendChild(animElem);
+      animElem.classList.add('emoji-animation');
+      setTimeout(() => document.body.removeChild(animElem), 800);
+      
+      document.getElementById('rps-result').innerHTML = `${moves[playerMove]} vs ${moves[botMove]}<br><strong>${outcome}</strong>`;
+    }
+    
+    /* ==== TIC TAC TOE ==== */
+    let tttCurrent = 'X';
+    let tttState = Array(9).fill('');
+    const tttBoard = document.getElementById('ttt-board');
+    const tttResult = document.getElementById('ttt-result');
+    const winPatterns = [
+      [0,1,2], [3,4,5], [6,7,8],
+      [0,3,6], [1,4,7], [2,5,8],
+      [0,4,8], [2,4,6]
+    ];
+    
+    function initTTT() {
+      tttBoard.innerHTML = '';
+      tttState = Array(9).fill('');
+      tttResult.innerText = '';
+      for (let i = 0; i < 9; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('ttt-cell');
+        cell.dataset.index = i;
+        cell.addEventListener('click', () => makeTTTMove(cell, i));
+        tttBoard.appendChild(cell);
+      }
+    }
+    
+    function makeTTTMove(cell, index) {
+      if (tttState[index] !== '' || tttResult.innerText !== '') return;
+      cell.innerText = tttCurrent;
+      tttState[index] = tttCurrent;
+      
+      if (checkTTTWin()) {
+        tttResult.innerText = `${tttCurrent} wins!`;
+        setTimeout(initTTT, 1500);
+        return;
+      }
+      
+      if (tttState.every(val => val !== '')) {
+        tttResult.innerText = 'Draw!';
+        setTimeout(initTTT, 1500);
+        return;
+      }
+      
+      tttCurrent = tttCurrent === 'X' ? 'O' : 'X';
+    }
+    
+    function checkTTTWin() {
+      return winPatterns.some(pattern => {
+        const [a, b, c] = pattern;
+        return tttState[a] && tttState[a] === tttState[b] && tttState[a] === tttState[c];
+      });
+    }
+    
+    function resetTTT() {
+      initTTT();
+      tttCurrent = 'X';
+    }
+    
+    initTTT();
+  </script>
+</body>
+</html>
