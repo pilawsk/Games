@@ -3,236 +3,543 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Game Hub - AI vs Human / PvP Games</title>
+  <title>Game Hub - Ultimate Gaming Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
     /* Global Styles */
+    :root {
+      --primary: #6c5ce7;
+      --secondary: #a8a5e6;
+      --accent: #ffd700;
+      --bg-light: #f8f9fa;
+      --bg-dark: #2d3436;
+      --text-light: #2d3436;
+      --text-dark: #f8f9fa;
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-      color: #333;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
     body.dark-mode {
-      background-color: #2e2e2e;
-      color: #f5f5f5;
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
     }
+
     /* Top Bar Styles */
     .top-bar {
       width: 100%;
-      background-color: #4a90e2;
+      background: linear-gradient(135deg, var(--primary), #4b33a8);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 20px;
-      position: relative;
+      padding: 1rem 2rem;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
+
     .top-bar h1 {
+      font-family: 'Press Start 2P', cursive;
       font-size: 1.5rem;
-      color: #fff;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
-    /* Dark Mode Toggle Button */
+
+    /* Dark Mode Toggle */
     .dark-mode-toggle {
-      background-color: transparent;
-      border: 2px solid #fff;
-      border-radius: 5px;
-      padding: 5px 10px;
-      color: #fff;
+      background: rgba(255,255,255,0.1);
+      border: 2px solid white;
+      border-radius: 30px;
+      padding: 8px 20px;
+      color: white;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
     }
+
     .dark-mode-toggle:hover {
-      background-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.05);
     }
-    /* Hamburger Menu (3-bar icon) Styles */
+
+    /* Menu Styles */
     .menu-icon {
       cursor: pointer;
-      display: inline-block;
+      position: relative;
+      z-index: 1001;
     }
+
     .menu-icon div {
-      width: 25px;
+      width: 30px;
       height: 3px;
-      background-color: #fff;
-      margin: 4px 0;
-      transition: 0.4s;
+      background: white;
+      margin: 6px 0;
+      transition: all 0.3s ease;
     }
-    /* Game Menu Dropdown Styles */
+
+    .menu-icon.active div:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .menu-icon.active div:nth-child(2) {
+      opacity: 0;
+    }
+
+    .menu-icon.active div:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
     .game-menu {
-      display: none;
-      position: absolute;
-      top: 60px;
-      left: 20px;
-      background-color: #4a90e2;
-      padding: 10px 15px;
-      border-radius: 5px;
-      min-width: 200px;
-      z-index: 10;
+      position: fixed;
+      top: 70px;
+      left: -300px;
+      background: rgba(255,255,255,0.95);
+      width: 250px;
+      height: calc(100vh - 70px);
+      padding: 2rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 5px 0 15px rgba(0,0,0,0.1);
     }
+
+    .game-menu.active {
+      left: 0;
+    }
+
     .game-menu a {
       display: block;
-      color: #fff;
+      padding: 1rem;
+      margin: 1rem 0;
+      background: var(--primary);
+      color: white;
       text-decoration: none;
-      padding: 8px 0;
-      transition: text-decoration 0.3s;
+      border-radius: 10px;
+      transform: translateX(-20px);
+      opacity: 0;
+      transition: all 0.3s ease;
     }
+
+    .game-menu.active a {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
     .game-menu a:hover {
-      text-decoration: underline;
+      background: #5b4ac7;
+      transform: translateX(10px);
     }
-    .coming-soon {
-      font-style: italic;
-      color: #fff;
-      padding-top: 8px;
-      margin-top: 10px;
-      border-top: 1px solid #fff;
-    }
+
     /* Main Content */
     .content {
-      padding: 20px;
+      margin-top: 80px;
+      padding: 2rem;
     }
-    /* Game Section Styles */
+
+    /* Game Sections */
     .game-section {
-      margin-top: 20px;
-      padding: 20px;
-      background-color: #e9e9e9;
-      border-radius: 5px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 20px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
-    .game-section h2 {
-      margin-bottom: 10px;
+
+    @keyframes slideUp {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
-    .move-buttons {
-      margin: 10px 0;
+
+    /* Game Specific Styles */
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 2rem 0;
     }
-    .move-button {
-      padding: 10px 15px;
-      margin-right: 10px;
-      border: none;
-      border-radius: 5px;
-      background-color: #4a90e2;
-      color: #fff;
+
+    .game-card {
+      background: white;
+      border-radius: 15px;
+      padding: 1rem;
+      text-align: center;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
-    .move-button:hover {
-      background-color: #357ab8;
+
+    .game-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
     }
-    #game-result p {
-      margin: 5px 0;
+
+    /* Tic Tac Toe Board */
+    .ttt-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      max-width: 400px;
+      margin: 2rem auto;
+    }
+
+    .ttt-cell {
+      aspect-ratio: 1;
+      background: white;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .ttt-cell:hover {
+      background: #f1f1f1;
+    }
+
+    /* Memory Game */
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      max-width: 600px;
+      margin: 2rem auto;
+    }
+
+    .memory-card {
+      aspect-ratio: 1;
+      background: var(--primary);
+      border-radius: 15px;
+      position: relative;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .memory-card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .memory-card .front,
+    .memory-card .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      border-radius: 15px;
+    }
+
+    .memory-card .back {
+      background: var(--secondary);
+      transform: rotateY(180deg);
+    }
+
+    /* Results and Animations */
+    .game-result {
+      text-align: center;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 10px;
+      animation: popIn 0.4s ease;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0); }
+      90% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .winner {
+      background: #00b894;
+      color: white;
+    }
+
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      pointer-events: none;
+      animation: confettiFall 3s linear forwards;
+    }
+
+    @keyframes confettiFall {
+      0% { transform: translateY(-100vh) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(720deg); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .game-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .ttt-grid {
+        max-width: 300px;
+      }
     }
   </style>
 </head>
 <body>
   <!-- Top Bar -->
   <div class="top-bar">
-    <!-- Hamburger Menu Icon -->
     <div class="menu-icon" id="menuToggle">
       <div></div>
       <div></div>
       <div></div>
     </div>
-    <h1>Game Hub</h1>
-    <!-- Dark Mode Toggle -->
-    <button class="dark-mode-toggle" id="darkModeToggle">Dark Mode</button>
+    <h1>GAME HUB</h1>
+    <button class="dark-mode-toggle" id="darkModeToggle">🌓 Toggle Theme</button>
   </div>
-  
-  <!-- Game Menu Dropdown -->
-  <div class="game-menu" id="gameMenu">
-    <a href="#ai-vs-human" onclick="showSection('ai-vs-human')">AI vs Human</a>
-    <a href="#player-vs-player" onclick="showSection('player-vs-player')">Player vs Player</a>
-    <div class="coming-soon">Coming Soon</div>
-  </div>
-  
-  <!-- Main Content Section -->
+
+  <!-- Game Menu -->
+  <nav class="game-menu" id="gameMenu">
+    <a href="#rps" onclick="showSection('rps')">Rock Paper Scissors</a>
+    <a href="#tictactoe" onclick="showSection('tictactoe')">Tic Tac Toe</a>
+    <a href="#memory" onclick="showSection('memory')">Memory Game</a>
+  </nav>
+
+  <!-- Main Content -->
   <div class="content">
-    <!-- AI vs Human Game Section -->
-    <section id="ai-vs-human" class="game-section">
-      <h2>AI vs Human: Rock, Paper, Scissors</h2>
-      <p>Choose your move:</p>
-      <div class="move-buttons">
-        <button class="move-button" data-move="rock">Rock</button>
-        <button class="move-button" data-move="paper">Paper</button>
-        <button class="move-button" data-move="scissors">Scissors</button>
+    <!-- Rock Paper Scissors -->
+    <section id="rps" class="game-section">
+      <h2>🎮 Rock Paper Scissors</h2>
+      <div class="game-grid">
+        <div class="game-card" data-move="rock">✊</div>
+        <div class="game-card" data-move="paper">✋</div>
+        <div class="game-card" data-move="scissors">✌️</div>
       </div>
-      <div id="game-result"></div>
+      <div id="rps-result" class="game-result"></div>
     </section>
-    
-    <!-- Player vs Player Section (Coming Soon) -->
-    <section id="player-vs-player" class="game-section" style="display:none;">
-      <h2>Player vs Player</h2>
-      <p>This mode is coming soon!</p>
+
+    <!-- Tic Tac Toe -->
+    <section id="tictactoe" class="game-section" style="display: none;">
+      <h2>⭕ Tic Tac Toe</h2>
+      <div class="ttt-grid" id="tttBoard"></div>
+      <div class="game-result" id="tttResult"></div>
+      <button class="dark-mode-toggle" onclick="resetTicTacToe()">Reset Game</button>
+    </section>
+
+    <!-- Memory Game -->
+    <section id="memory" class="game-section" style="display: none;">
+      <h2>🧠 Memory Game</h2>
+      <div class="memory-grid" id="memoryBoard"></div>
+      <div class="game-result" id="memoryResult"></div>
     </section>
   </div>
-  
-  <!-- JavaScript for Interactivity -->
-  <script>
-    // Dark mode toggle logic
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const body = document.body;
-    darkModeToggle.addEventListener('click', () => {
-      body.classList.toggle('dark-mode');
-      darkModeToggle.textContent = body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
-    });
 
-    // Hamburger menu toggle logic
-    const menuToggle = document.getElementById('menuToggle');
-    const gameMenu = document.getElementById('gameMenu');
-    menuToggle.addEventListener('click', () => {
-      // Toggle display property
-      gameMenu.style.display = gameMenu.style.display === 'block' ? 'none' : 'block';
-    });
+<script>
+  // Theme Toggle
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const body = document.body;
+  darkModeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    darkModeToggle.textContent = body.classList.contains('dark-mode') ? '🌞 Light Mode' : '🌙 Dark Mode';
+  });
 
-    // Optional: Close the game menu when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!document.querySelector('.top-bar').contains(e.target) && gameMenu.style.display === 'block') {
-        gameMenu.style.display = 'none';
-      }
-    });
+  // Menu Toggle
+  const menuToggle = document.getElementById('menuToggle');
+  const gameMenu = document.getElementById('gameMenu');
+  menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    menuToggle.classList.toggle('active');
+    gameMenu.classList.toggle('active');
+  });
 
-    // Navigation: Show selected game section
-    function showSection(id) {
-      // Hide all game sections
-      document.querySelectorAll('.game-section').forEach(section => section.style.display = 'none');
-      // Show the selected section
-      document.getElementById(id).style.display = 'block';
-      // Hide the game menu after selection
-      gameMenu.style.display = 'none';
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!gameMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+      menuToggle.classList.remove('active');
+      gameMenu.classList.remove('active');
     }
+  });
 
-    // AI vs Human Game Logic for Rock, Paper, Scissors
-    const moves = ['rock', 'paper', 'scissors'];
-    const buttons = document.querySelectorAll('.move-button');
-    const gameResult = document.getElementById('game-result');
+  // Show Selected Section
+  function showSection(id) {
+    document.querySelectorAll('.game-section').forEach(section => {
+      section.style.display = 'none';
+    });
+    document.getElementById(id).style.display = 'block';
+  }
 
-    buttons.forEach(button => {
-      button.addEventListener('click', function() {
-        const userMove = this.dataset.move;
-        const aiMove = moves[Math.floor(Math.random() * moves.length)];
-        let result = '';
+  // Rock Paper Scissors Game
+  const moves = ['rock', 'paper', 'scissors'];
+  const emojiMap = { rock: '✊', paper: '✋', scissors: '✌️' };
+  document.querySelectorAll('[data-move]').forEach(card => {
+    card.addEventListener('click', function() {
+      const userMove = this.dataset.move;
+      const aiMove = moves[Math.floor(Math.random() * moves.length)];
+      let result = '';
 
-        // Determine game result
-        if (userMove === aiMove) {
-          result = "It's a tie!";
-        } else if (
-          (userMove === 'rock' && aiMove === 'scissors') ||
-          (userMove === 'paper' && aiMove === 'rock') ||
-          (userMove === 'scissors' && aiMove === 'paper')
-        ) {
-          result = "You win!";
-        } else {
-          result = "AI wins!";
-        }
+      if (userMove === aiMove) {
+        result = "It's a tie!";
+      } else if (
+        (userMove === 'rock' && aiMove === 'scissors') ||
+        (userMove === 'paper' && aiMove === 'rock') ||
+        (userMove === 'scissors' && aiMove === 'paper')
+      ) {
+        result = "🎉 You win!";
+        createConfetti();
+      } else {
+        result = "🤖 AI wins!";
+      }
 
-        // Display the round result
-        gameResult.innerHTML = `
-          <p>You chose <strong>${userMove}</strong>.</p>
-          <p>AI chose <strong>${aiMove}</strong>.</p>
-          <p><strong>${result}</strong></p>
-        `;
+      document.getElementById('rps-result').innerHTML = `
+        <p>You chose ${emojiMap[userMove]}</p>
+        <p>AI chose ${emojiMap[aiMove]}</p>
+        <p class="winner">${result}</p>
+      `;
+    });
+  });
+
+  // Tic Tac Toe Game
+  let currentPlayer = 'X';
+  let gameBoard = Array(9).fill('');
+  const winCombos = [
+    [0,1,2], [3,4,5], [6,7,8], // Rows
+    [0,3,6], [1,4,7], [2,5,8], // Columns
+    [0,4,8], [2,4,6] // Diagonals
+  ];
+
+  function initTicTacToe() {
+    const board = document.getElementById('tttBoard');
+    board.innerHTML = '';
+    for (let i = 0; i < 9; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'ttt-cell';
+      cell.addEventListener('click', () => handleMove(i, cell));
+      board.appendChild(cell);
+    }
+  }
+
+  function handleMove(index, cell) {
+    if (gameBoard[index] || document.getElementById('tttResult').innerHTML) return;
+    
+    gameBoard[index] = currentPlayer;
+    cell.textContent = currentPlayer;
+    
+    if (checkWin()) {
+      document.getElementById('tttResult').innerHTML = `
+        <p class="winner">Player ${currentPlayer} wins! 🎉</p>
+      `;
+      createConfetti();
+      return;
+    }
+    
+    if (gameBoard.every(cell => cell)) {
+      document.getElementById('tttResult').innerHTML = `<p>It's a draw! 🤝</p>`;
+      return;
+    }
+    
+    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+  }
+
+  function checkWin() {
+    return winCombos.some(combo => {
+      return combo.every(index => {
+        return gameBoard[index] === currentPlayer;
       });
     });
-  </script>
+  }
+
+  function resetTicTacToe() {
+    gameBoard = Array(9).fill('');
+    currentPlayer = 'X';
+    document.getElementById('tttResult').innerHTML = '';
+    initTicTacToe();
+  }
+
+  // Memory Game
+  const memoryCards = ['🎮', '👾', '🕹️', '🎲', '🎯', '🎨', '🧩', '🏆'];
+  let flippedCards = [];
+  let matchesFound = 0;
+
+  function initMemoryGame() {
+    const board = document.getElementById('memoryBoard');
+    board.innerHTML = '';
+    const shuffledCards = [...memoryCards, ...memoryCards]
+      .sort(() => Math.random() - 0.5);
+    
+    shuffledCards.forEach((emoji, index) => {
+      const card = document.createElement('div');
+      card.className = 'memory-card';
+      card.innerHTML = `
+        <div class="front">?</div>
+        <div class="back">${emoji}</div>
+      `;
+      card.addEventListener('click', () => flipCard(card, emoji));
+      board.appendChild(card);
+    });
+  }
+
+  function flipCard(card, emoji) {
+    if (flippedCards.length < 2 && !card.classList.contains('flipped')) {
+      card.classList.add('flipped');
+      flippedCards.push({ card, emoji });
+      
+      if (flippedCards.length === 2) {
+        checkMatch();
+      }
+    }
+  }
+
+  function checkMatch() {
+    const [card1, card2] = flippedCards;
+    
+    if (card1.emoji === card2.emoji) {
+      matchesFound++;
+      flippedCards = [];
+      if (matchesFound === memoryCards.length) {
+        document.getElementById('memoryResult').innerHTML = `
+          <p class="winner">You won! 🎉</p>
+        `;
+        createConfetti();
+      }
+    } else {
+      setTimeout(() => {
+        card1.card.classList.remove('flipped');
+        card2.card.classList.remove('flipped');
+        flippedCards = [];
+      }, 1000);
+    }
+  }
+
+  // Confetti Animation
+  function createConfetti() {
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+      confetti.style.animationDelay = Math.random() * 2 + 's';
+      document.body.appendChild(confetti);
+      setTimeout(() => confetti.remove(), 3000);
+    }
+  }
+
+  // Initialize Games
+  initTicTacToe();
+  initMemoryGame();
+</script>
 </body>
 </html>
