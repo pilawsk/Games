@@ -3,241 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Classic AI Games</title>
+    <title>Cosmic Emoji Arcade</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap" rel="stylesheet">
     <style>
+        /* Cosmic Background Styles */
         :root {
-            --bg: #f0f2f5;
-            --text: #2c3e50;
-            --primary: #3498db;
-            --secondary: #ecf0f1;
+            --primary: #1a1a2e;
+            --secondary: #e94560;
+            --game-bg: #ffffff10;
         }
+
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            margin: 0;
+            height: 100vh;
+            background: var(--primary);
+            overflow: hidden;
+            font-family: 'Inconsolata', monospace;
+            color: white;
         }
+
+        .cosmic-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            perspective: 1000px;
+        }
+
+        .emoji-actor {
+            position: absolute;
+            animation: 
+                orbital-float 6s ease-in-out infinite,
+                spatial-rotate 6s linear infinite;
+            font-size: 1.5rem;
+            transform-style: preserve-3d;
+            opacity: 0.3;
+        }
+
+        @keyframes orbital-float {
+            0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+            50% { transform: translate3d(0, -15vh, 100px) scale(1.3); }
+        }
+
+        @keyframes spatial-rotate {
+            0% { transform: rotate3d(0.2, 1, 0.1, 0deg); }
+            100% { transform: rotate3d(0.2, 1, 0.1, 360deg); }
+        }
+
+        /* Game Container Styles */
+        .game-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--game-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            z-index: 1;
+        }
+
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
+
+        /* ... (Keep previous game styles but update colors) ... */
         .game-card {
-            background: white;
+            background: #2d343680;
             padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            text-align: center;
+            border-radius: 1rem;
+            border: 2px solid #e94560;
         }
+
         button {
-            background: var(--primary);
+            background: #e94560;
             color: white;
             border: none;
             padding: 0.8rem 1.5rem;
-            border-radius: 5px;
+            border-radius: 0.5rem;
             cursor: pointer;
-            margin: 5px;
-            transition: transform 0.2s;
+            transition: all 0.3s;
         }
-        button:hover {
-            transform: scale(1.05);
+
+        /* Particle Effects */
+        .quantum-particle {
+            position: absolute;
+            pointer-events: none;
+            animation: quantum-decay 1.8s ease-out forwards;
+            transform-style: preserve-3d;
+            z-index: 0;
         }
-        .board {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 5px;
-            margin: 1rem auto;
-            max-width: 200px;
-        }
-        .cell {
-            background: var(--secondary);
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            cursor: pointer;
-        }
-        .rps-choices {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-        .game-output {
-            margin: 1rem 0;
-            padding: 1rem;
-            background: var(--secondary);
-            border-radius: 5px;
+
+        @keyframes quantum-decay {
+            0% { transform: scale(0) translateZ(0); opacity: 1; }
+            100% { transform: scale(4) translate3d(
+                calc((var(--dx) * 50vw)), 
+                calc((var(--dy) * 50vh)), 
+                1000px
+            ); opacity: 0; }
         }
     </style>
 </head>
 <body>
-    <h1>Classic AI Minigames</h1>
+    <div class="cosmic-background" id="cosmicLayer"></div>
     
-    <div class="games-grid">
-        <!-- Tic-Tac-Toe -->
-        <div class="game-card">
-            <h2>Tic-Tac-Toe 🤖</h2>
-            <div class="board" id="ticTacToeBoard">
-                <div class="cell" data-index="0"></div>
-                <div class="cell" data-index="1"></div>
-                <div class="cell" data-index="2"></div>
-                <div class="cell" data-index="3"></div>
-                <div class="cell" data-index="4"></div>
-                <div class="cell" data-index="5"></div>
-                <div class="cell" data-index="6"></div>
-                <div class="cell" data-index="7"></div>
-                <div class="cell" data-index="8"></div>
+    <div class="game-container">
+        <h1>🪐 Cosmic Emoji Arcade</h1>
+        <div class="games-grid">
+            <!-- Tic-Tac-Toe Game -->
+            <div class="game-card">
+                <!-- ... (Keep Tic-Tac-Toe HTML) ... -->
             </div>
-            <button onclick="resetTicTacToe()">Reset Game</button>
-            <div id="ticTacToeStatus" class="game-output">Your turn!</div>
-        </div>
 
-        <!-- Rock-Paper-Scissors -->
-        <div class="game-card">
-            <h2>Rock-Paper-Scissors ✂️</h2>
-            <div class="rps-choices">
-                <button onclick="playRPS('rock')">🪨</button>
-                <button onclick="playRPS('paper')">📄</button>
-                <button onclick="playRPS('scissors')">✂️</button>
+            <!-- Rock-Paper-Scissors Game -->
+            <div class="game-card">
+                <!-- ... (Keep RPS HTML) ... -->
             </div>
-            <div id="rpsResult" class="game-output">Choose your weapon!</div>
-        </div>
 
-        <!-- Number Guesser -->
-        <div class="game-card">
-            <h2>Number Guesser 🔢</h2>
-            <input type="number" id="guessInput" min="1" max="100" placeholder="1-100">
-            <button onclick="checkGuess()">Check</button>
-            <div id="guessResult" class="game-output">Guess a number between 1-100</div>
+            <!-- Number Guesser Game -->
+            <div class="game-card">
+                <!-- ... (Keep Number Guesser HTML) ... -->
+            </div>
         </div>
     </div>
 
     <script>
-        // Tic-Tac-Toe Game
-        let currentPlayer = 'X';
-        let gameBoard = ['', '', '', '', '', '', '', '', ''];
-        let gameActive = true;
-
-        document.querySelectorAll('.cell').forEach(cell => {
-            cell.addEventListener('click', () => {
-                const index = cell.dataset.index;
-                if (gameBoard[index] === '' && gameActive) {
-                    gameBoard[index] = currentPlayer;
-                    cell.textContent = currentPlayer;
-                    checkWin();
-                    if (gameActive) {
-                        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-                        if (currentPlayer === 'O') aiMove();
-                    }
-                }
-            });
-        });
-
-        function aiMove() {
-            const emptyCells = gameBoard
-                .map((cell, index) => cell === '' ? index : null)
-                .filter(cell => cell !== null);
+        // Cosmic Background System
+        const EMOJI_GALAXY = ['🌌','🌠','🪐','💫','🌑','☄️','🌙','✨','⚡','🌀','🎇'];
+        
+        function createCosmicElement() {
+            const element = document.createElement('div');
+            element.className = 'emoji-actor';
+            element.textContent = EMOJI_GALAXY[Math.floor(Math.random() * EMOJI_GALAXY.length)];
             
-            if (emptyCells.length > 0) {
-                const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-                setTimeout(() => {
-                    gameBoard[randomIndex] = 'O';
-                    document.querySelector(`[data-index="${randomIndex}"]`).textContent = 'O';
-                    checkWin();
-                    currentPlayer = 'X';
-                }, 500);
-            }
-        }
-
-        function checkWin() {
-            const winCombos = [
-                [0,1,2], [3,4,5], [6,7,8], // Rows
-                [0,3,6], [1,4,7], [2,5,8], // Columns
-                [0,4,8], [2,4,6] // Diagonals
-            ];
-
-            for (let combo of winCombos) {
-                const [a,b,c] = combo;
-                if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
-                    gameActive = false;
-                    document.getElementById('ticTacToeStatus').textContent = 
-                        `${gameBoard[a]} wins!`;
-                    return;
-                }
-            }
-
-            if (!gameBoard.includes('')) {
-                gameActive = false;
-                document.getElementById('ticTacToeStatus').textContent = "It's a tie!";
-            }
-        }
-
-        function resetTicTacToe() {
-            gameBoard = ['', '', '', '', '', '', '', '', ''];
-            gameActive = true;
-            currentPlayer = 'X';
-            document.querySelectorAll('.cell').forEach(cell => cell.textContent = '');
-            document.getElementById('ticTacToeStatus').textContent = 'Your turn!';
-        }
-
-        // Rock-Paper-Scissors Game
-        function playRPS(playerChoice) {
-            const choices = ['rock', 'paper', 'scissors'];
-            const aiChoice = choices[Math.floor(Math.random() * 3)];
-            let result;
-
-            if (playerChoice === aiChoice) {
-                result = "It's a tie!";
-            } else if (
-                (playerChoice === 'rock' && aiChoice === 'scissors') ||
-                (playerChoice === 'paper' && aiChoice === 'rock') ||
-                (playerChoice === 'scissors' && aiChoice === 'paper')
-            ) {
-                result = "You win!";
-            } else {
-                result = "AI wins!";
-            }
-
-            document.getElementById('rpsResult').innerHTML = `
-                You chose ${playerChoice} ${getEmoji(playerChoice)}<br>
-                AI chose ${aiChoice} ${getEmoji(aiChoice)}<br>
-                ${result}
+            element.style.cssText = `
+                left: ${Math.random() * 100}%;
+                top: ${Math.random() * 100}%;
+                animation-duration: ${Math.random() * 8 + 4}s;
+                font-size: ${Math.random() * 2 + 1}rem;
+                opacity: ${Math.random() * 0.3 + 0.1};
             `;
+
+            document.getElementById('cosmicLayer').appendChild(element);
+            
+            // Auto-remove elements
+            setTimeout(() => element.remove(), 15000);
         }
 
-        function getEmoji(choice) {
-            return {
-                rock: '🪨',
-                paper: '📄',
-                scissors: '✂️'
-            }[choice];
+        // Initialize cosmic background
+        setInterval(createCosmicElement, 1000);
+
+        // Game Particle Effects
+        function createGameParticles(emoji, x, y) {
+            const container = document.getElementById('cosmicLayer');
+            for(let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'quantum-particle';
+                particle.textContent = emoji;
+                
+                const dx = (Math.random() - 0.5) * 2;
+                const dy = (Math.random() - 0.5) * 2;
+                
+                particle.style.cssText = `
+                    left: ${x}px;
+                    top: ${y}px;
+                    --dx: ${dx};
+                    --dy: ${dy};
+                    font-size: ${Math.random() * 1.5 + 1}rem;
+                    animation-delay: ${Math.random() * 0.3}s;
+                `;
+
+                container.appendChild(particle);
+                setTimeout(() => particle.remove(), 1800);
+            }
         }
 
-        // Number Guesser Game
-        let targetNumber = Math.floor(Math.random() * 100) + 1;
-        let attempts = 0;
+        // Enhanced Game Functions with Effects
+        function checkWin() {
+            // ... (previous win logic) ...
+            
+            if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+                const winnerCell = document.querySelector(`[data-index="${a}"]`);
+                const rect = winnerCell.getBoundingClientRect();
+                createGameParticles('🎉', rect.left + 15, rect.top + 15);
+            }
+        }
+
+        function playRPS(playerChoice) {
+            // ... (previous RPS logic) ...
+            
+            const resultEmoji = result.includes('win') ? '🎊' : '💥';
+            createGameParticles(resultEmoji, e.clientX, e.clientY);
+        }
 
         function checkGuess() {
-            const userGuess = parseInt(document.getElementById('guessInput').value);
-            attempts++;
-
+            // ... (previous guess logic) ...
+            
             if (userGuess === targetNumber) {
-                document.getElementById('guessResult').textContent = 
-                    `🎉 Correct! It took you ${attempts} attempts`;
-                targetNumber = Math.floor(Math.random() * 100) + 1;
-                attempts = 0;
-            } else {
-                const hint = userGuess < targetNumber ? 'higher' : 'lower';
-                document.getElementById('guessResult').textContent = 
-                    `Try again! Go ${hint}`;
+                const inputRect = document.getElementById('guessInput').getBoundingClientRect();
+                createGameParticles('🎯', inputRect.left + 50, inputRect.top + 10);
             }
-
-            document.getElementById('guessInput').value = '';
         }
+
+        // Interactive Background
+        document.addEventListener('click', (e) => {
+            if(Math.random() > 0.5) {
+                createGameParticles('✨', e.clientX, e.clientY);
+            }
+        });
+
+        // Initialize Games
+        // ... (Keep previous game initialization code) ...
     </script>
 </body>
 </html>
