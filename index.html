@@ -1,314 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game Hub - Modern Edition</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #4A90E2;
-      --secondary: #6BB1FF;
-      --accent: #FFD166;
-      --bg-light: #F0F4F8;
-      --bg-dark: #0A0A0A;
-      --text-light: #2D3436;
-      --text-dark: #F0F4F8;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Rubik', sans-serif;
-      background: var(--bg-light);
-      color: var(--text-light);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    body.dark-mode {
-      background: var(--bg-dark);
-      color: var(--text-dark);
-    }
-
-    /* Top Bar */
-    .top-bar {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 2rem;
-      z-index: 1000;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    .top-bar h1 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.8rem;
-      color: white;
-      letter-spacing: -1px;
-    }
-
-    /* Improved Hamburger Menu */
-    .menu-icon {
-      cursor: pointer;
-      position: relative;
-      z-index: 1001;
-      padding: 12px;
-    }
-
-    .menu-icon__bar {
-      width: 30px;
-      height: 3px;
-      background: white;
-      margin: 6px 0;
-      transition: all 0.3s ease;
-      border-radius: 2px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .menu-icon.active .menu-icon__bar:nth-child(1) {
-      transform: translateY(9px) rotate(45deg);
-    }
-
-    .menu-icon.active .menu-icon__bar:nth-child(2) {
-      opacity: 0;
-    }
-
-    .menu-icon.active .menu-icon__bar:nth-child(3) {
-      transform: translateY(-9px) rotate(-45deg);
-    }
-
-    .game-menu {
-      position: fixed;
-      top: 70px;
-      left: -300px;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(10px);
-      width: 250px;
-      height: calc(100vh - 70px);
-      padding: 2rem;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 5px 0 15px rgba(0,0,0,0.1);
-    }
-
-    body.dark-mode .game-menu {
-      background: rgba(10,10,10,0.95);
-    }
-
-    .game-menu.active {
-      left: 0;
-    }
-
-    .game-menu a {
-      display: block;
-      padding: 1rem;
-      margin: 1rem 0;
-      background: var(--primary);
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      transform: translateX(-20px);
-      opacity: 0;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    .game-menu.active a {
-      transform: translateX(0);
-      opacity: 1;
-    }
-
-    .game-menu a:hover {
-      transform: translateX(10px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-    }
-
-    /* Main Content */
-    .content {
-      margin-top: 80px;
-      padding: 2rem;
-    }
-
-    /* Rock Paper Scissors Animation */
-    @keyframes rockShake {
-      0% { transform: rotate(-15deg); }
-      50% { transform: rotate(15deg); }
-      100% { transform: rotate(-15deg); }
-    }
-
-    @keyframes paperWave {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0); }
-    }
-
-    @keyframes scissorsSnip {
-      0% { transform: rotate(0deg); }
-      50% { transform: rotate(10deg); }
-      100% { transform: rotate(0deg); }
-    }
-
-    .rps-emoji {
-      font-size: 4rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .rps-emoji.rock {
-      animation: rockShake 1s infinite;
-    }
-
-    .rps-emoji.paper {
-      animation: paperWave 1s infinite;
-    }
-
-    .rps-emoji.scissors {
-      animation: scissorsSnip 0.5s infinite;
-    }
-
-    /* Tic Tac Toe Fixes */
-    .ttt-grid {
-      max-width: 400px;
-      margin: 2rem auto;
-      padding: 10px;
-    }
-
-    .ttt-cell {
-      background: rgba(255,255,255,0.9);
-      border: 2px solid var(--primary);
-      font-size: 3.5rem;
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
-    body.dark-mode .ttt-cell {
-      background: rgba(255,255,255,0.1);
-      border-color: var(--secondary);
-    }
-
-    /* Improved Dark Mode Contrast */
-    body.dark-mode .game-section {
-      background: rgba(255,255,255,0.1);
-    }
-
-    /* Game Sections */
-    .game-section {
-      background: rgba(255,255,255,0.9);
-      border-radius: 20px;
-      padding: 2rem;
-      margin: 2rem 0;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      transform: translateY(20px);
-      opacity: 0;
-      animation: slideUp 0.6s forwards;
-    }
-
-    @keyframes slideUp {
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    /* ... Rest of the CSS remains similar but uses new color variables ... */
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic AI Games</title>
+    <style>
+        :root {
+            --bg: #f0f2f5;
+            --text: #2c3e50;
+            --primary: #3498db;
+            --secondary: #ecf0f1;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .game-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            margin: 1rem auto;
+            max-width: 200px;
+        }
+        .cell {
+            background: var(--secondary);
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        .rps-choices {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .game-output {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--secondary);
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-  <!-- Top Bar -->
-  <div class="top-bar">
-    <div class="menu-icon" id="menuToggle">
-      <div class="menu-icon__bar"></div>
-      <div class="menu-icon__bar"></div>
-      <div class="menu-icon__bar"></div>
+    <h1>Classic AI Minigames</h1>
+    
+    <div class="games-grid">
+        <!-- Tic-Tac-Toe -->
+        <div class="game-card">
+            <h2>Tic-Tac-Toe 🤖</h2>
+            <div class="board" id="ticTacToeBoard">
+                <div class="cell" data-index="0"></div>
+                <div class="cell" data-index="1"></div>
+                <div class="cell" data-index="2"></div>
+                <div class="cell" data-index="3"></div>
+                <div class="cell" data-index="4"></div>
+                <div class="cell" data-index="5"></div>
+                <div class="cell" data-index="6"></div>
+                <div class="cell" data-index="7"></div>
+                <div class="cell" data-index="8"></div>
+            </div>
+            <button onclick="resetTicTacToe()">Reset Game</button>
+            <div id="ticTacToeStatus" class="game-output">Your turn!</div>
+        </div>
+
+        <!-- Rock-Paper-Scissors -->
+        <div class="game-card">
+            <h2>Rock-Paper-Scissors ✂️</h2>
+            <div class="rps-choices">
+                <button onclick="playRPS('rock')">🪨</button>
+                <button onclick="playRPS('paper')">📄</button>
+                <button onclick="playRPS('scissors')">✂️</button>
+            </div>
+            <div id="rpsResult" class="game-output">Choose your weapon!</div>
+        </div>
+
+        <!-- Number Guesser -->
+        <div class="game-card">
+            <h2>Number Guesser 🔢</h2>
+            <input type="number" id="guessInput" min="1" max="100" placeholder="1-100">
+            <button onclick="checkGuess()">Check</button>
+            <div id="guessResult" class="game-output">Guess a number between 1-100</div>
+        </div>
     </div>
-    <h1>GAME HUB</h1>
-    <button class="dark-mode-toggle" id="darkModeToggle">🌓</button>
-  </div>
 
-  <!-- Game Menu -->
-  <nav class="game-menu" id="gameMenu">
-    <a href="#rps" onclick="showSection('rps')">🎮 Rock Paper Scissors</a>
-    <a href="#tictactoe" onclick="showSection('tictactoe')">⭕ Tic Tac Toe</a>
-    <a href="#memory" onclick="showSection('memory')">🧠 Memory Game</a>
-  </nav>
+    <script>
+        // Tic-Tac-Toe Game
+        let currentPlayer = 'X';
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        let gameActive = true;
 
-  <!-- Main Content -->
-  <div class="content">
-    <!-- Rock Paper Scissors -->
-    <section id="rps" class="game-section">
-      <h2>🎮 Rock Paper Scissors</h2>
-      <div class="game-grid">
-        <div class="rps-emoji rock" data-move="rock">✊</div>
-        <div class="rps-emoji paper" data-move="paper">✋</div>
-        <div class="rps-emoji scissors" data-move="scissors">✌️</div>
-      </div>
-      <div id="rps-result" class="game-result"></div>
-    </section>
+        document.querySelectorAll('.cell').forEach(cell => {
+            cell.addEventListener('click', () => {
+                const index = cell.dataset.index;
+                if (gameBoard[index] === '' && gameActive) {
+                    gameBoard[index] = currentPlayer;
+                    cell.textContent = currentPlayer;
+                    checkWin();
+                    if (gameActive) {
+                        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                        if (currentPlayer === 'O') aiMove();
+                    }
+                }
+            });
+        });
 
-    <!-- Tic Tac Toe -->
-    <section id="tictactoe" class="game-section" style="display: none;">
-      <h2>⭕ Tic Tac Toe</h2>
-      <div class="ttt-grid" id="tttBoard"></div>
-      <div class="game-result" id="tttResult"></div>
-      <button class="reset-button" onclick="resetTicTacToe()">🔄 Reset</button>
-    </section>
+        function aiMove() {
+            const emptyCells = gameBoard
+                .map((cell, index) => cell === '' ? index : null)
+                .filter(cell => cell !== null);
+            
+            if (emptyCells.length > 0) {
+                const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                setTimeout(() => {
+                    gameBoard[randomIndex] = 'O';
+                    document.querySelector(`[data-index="${randomIndex}"]`).textContent = 'O';
+                    checkWin();
+                    currentPlayer = 'X';
+                }, 500);
+            }
+        }
 
-    <!-- Memory Game -->
-    <section id="memory" class="game-section" style="display: none;">
-      <h2>🧠 Memory Game</h2>
-      <div class="memory-grid" id="memoryBoard"></div>
-      <div class="game-result" id="memoryResult"></div>
-    </section>
-  </div>
+        function checkWin() {
+            const winCombos = [
+                [0,1,2], [3,4,5], [6,7,8], // Rows
+                [0,3,6], [1,4,7], [2,5,8], // Columns
+                [0,4,8], [2,4,6] // Diagonals
+            ];
 
-<script>
-  // Theme Toggle
-  const darkModeToggle = document.getElementById('darkModeToggle');
-  const body = document.body;
-  darkModeToggle.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-    darkModeToggle.textContent = body.classList.contains('dark-mode') ? '🌞' : '🌙';
-  });
+            for (let combo of winCombos) {
+                const [a,b,c] = combo;
+                if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+                    gameActive = false;
+                    document.getElementById('ticTacToeStatus').textContent = 
+                        `${gameBoard[a]} wins!`;
+                    return;
+                }
+            }
 
-  // Menu Toggle
-  const menuToggle = document.getElementById('menuToggle');
-  const gameMenu = document.getElementById('gameMenu');
-  menuToggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    menuToggle.classList.toggle('active');
-    gameMenu.classList.toggle('active');
-  });
+            if (!gameBoard.includes('')) {
+                gameActive = false;
+                document.getElementById('ticTacToeStatus').textContent = "It's a tie!";
+            }
+        }
 
-  // Close menu when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!gameMenu.contains(e.target) && !menuToggle.contains(e.target)) {
-      menuToggle.classList.remove('active');
-      gameMenu.classList.remove('active');
-    }
-  });
+        function resetTicTacToe() {
+            gameBoard = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+            currentPlayer = 'X';
+            document.querySelectorAll('.cell').forEach(cell => cell.textContent = '');
+            document.getElementById('ticTacToeStatus').textContent = 'Your turn!';
+        }
 
-  // Rest of the JavaScript remains similar with improved animations
-  // Add these animation classes when moves are selected
-  document.querySelectorAll('.rps-emoji').forEach(emoji => {
-    emoji.addEventListener('click', function() {
-      this.style.transform = 'scale(1.2)';
-      setTimeout(() => {
-        this.style.transform = 'scale(1)';
-      }, 200);
-      
-      // Game logic here
-    });
-  });
+        // Rock-Paper-Scissors Game
+        function playRPS(playerChoice) {
+            const choices = ['rock', 'paper', 'scissors'];
+            const aiChoice = choices[Math.floor(Math.random() * 3)];
+            let result;
 
-  // Initialize games
-  initTicTacToe();
-  initMemoryGame();
-</script>
+            if (playerChoice === aiChoice) {
+                result = "It's a tie!";
+            } else if (
+                (playerChoice === 'rock' && aiChoice === 'scissors') ||
+                (playerChoice === 'paper' && aiChoice === 'rock') ||
+                (playerChoice === 'scissors' && aiChoice === 'paper')
+            ) {
+                result = "You win!";
+            } else {
+                result = "AI wins!";
+            }
+
+            document.getElementById('rpsResult').innerHTML = `
+                You chose ${playerChoice} ${getEmoji(playerChoice)}<br>
+                AI chose ${aiChoice} ${getEmoji(aiChoice)}<br>
+                ${result}
+            `;
+        }
+
+        function getEmoji(choice) {
+            return {
+                rock: '🪨',
+                paper: '📄',
+                scissors: '✂️'
+            }[choice];
+        }
+
+        // Number Guesser Game
+        let targetNumber = Math.floor(Math.random() * 100) + 1;
+        let attempts = 0;
+
+        function checkGuess() {
+            const userGuess = parseInt(document.getElementById('guessInput').value);
+            attempts++;
+
+            if (userGuess === targetNumber) {
+                document.getElementById('guessResult').textContent = 
+                    `🎉 Correct! It took you ${attempts} attempts`;
+                targetNumber = Math.floor(Math.random() * 100) + 1;
+                attempts = 0;
+            } else {
+                const hint = userGuess < targetNumber ? 'higher' : 'lower';
+                document.getElementById('guessResult').textContent = 
+                    `Try again! Go ${hint}`;
+            }
+
+            document.getElementById('guessInput').value = '';
+        }
+    </script>
 </body>
 </html>
